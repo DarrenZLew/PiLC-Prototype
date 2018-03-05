@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Grid } from "react-bootstrap";
-import { RenderInput } from "./Form/RenderInput";
 import { Form } from "./Form/Form";
+import { formInputs } from "./Form/formInputs"
 
 class Components extends Component {
   state = {
@@ -17,23 +17,11 @@ class Components extends Component {
     let newFields = this.state.fields;
     let newId = this.state.id;
     let inputs = [
-      {
-        input: <RenderInput type="text" id={newId++} label="Enter Input" />,
-        id: newId,
-        label: "Input"
-      },
-      {
-        input: <RenderInput type="text" id={newId++} label="Enter Component" />,
-        id: newId,
-        label: "Component"
-      },
-      {
-        input: <RenderInput type="text" id={newId++} label="Enter Event" />,
-        id: newId,
-        label: "Event"
-      }
-    ];
-    newFields.push(inputs);
+      { componentClass: "input", id: newId++, label: "Input" },
+      { componentClass: "select", id: newId++, label: "Component" },
+      { componentClass: "input", id: newId++, label: "Event" }
+    ]
+    newFields.push(formInputs(inputs));
     this.setState({
       fields: newFields,
       id: newId

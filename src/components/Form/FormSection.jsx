@@ -7,11 +7,12 @@ export const FormSection = ({ fields }) => {
       <FormGroup key={"FormGroup" + index}>
         {field.map((input, idx) => {
           return (
-          <Col key={input.id + idx} md={12/field.length} xs={12}>
-            <ControlLabel>{input.label + " " + (index + 1)}</ControlLabel>
-            {input.input}
-          </Col>
-        )})}
+            <Col key={input.id + idx} md={12 / field.length} xs={12}>
+              <ControlLabel>{input.label + " " + (index + 1)}</ControlLabel>
+              {input.input}
+            </Col>
+          );
+        })}
       </FormGroup>
     );
   });
