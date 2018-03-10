@@ -1,20 +1,31 @@
 import React from "react";
-import { FormGroup, ControlLabel, Col } from "react-bootstrap";
+import { Grid, Row } from "react-bootstrap";
+import { FieldBody } from "./FieldBody";
+import { Header } from "./Header";
 
-export const FormSection = ({ fields }) => {
-  const formSection = fields.map((field, index) => {
+export const FormSection = ({ sectionData }) => {
+  let formSection = sectionData.fields.map((field, index) => {
     return (
-      <FormGroup key={"FormGroup" + index}>
-        {field.map((input, idx) => {
-          return (
-            <Col key={input.id + idx} md={12 / field.length} xs={12}>
-              <ControlLabel>{input.label + " " + (index + 1)}</ControlLabel>
-              {input.input}
-            </Col>
-          );
-        })}
-      </FormGroup>
+      <FieldBody
+        key={sectionData.sectionName + index}
+        id={sectionData.sectionName + index}
+        componentClass={sectionData.componentClass}
+        type={sectionData.fieldtype}
+        label={sectionData.fieldtype}
+        options={sectionData.options}
+      />
     );
   });
-  return formSection;
+  return (
+    <Grid>
+      <Row>
+        <h2>{sectionData.sectionName}</h2>
+      </Row>
+      <Header
+        headerName={sectionData.headerName}
+        fieldName={sectionData.fieldName}
+      />
+      {formSection}
+    </Grid>
+  );
 };

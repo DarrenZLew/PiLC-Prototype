@@ -1,12 +1,14 @@
 import React from "react";
-import { FieldGroup } from "./FieldGroup";
+import { SelectInput } from "./SelectInput";
+import { TextInput } from "./TextInput";
 
-export const RenderInput = ({ componentClass, id, label }) => (
-  <FieldGroup
-    id={"ControlGroup " + id}
-    componentClass={componentClass}
-    label={label + " " + (id + 1)}
-    placeholder={label}
-    key={id}
-  />
-);
+export const RenderInput = props => {
+  switch (props.componentClass) {
+    case "select":
+      return <SelectInput {...props} />;
+    case "input":
+      return <TextInput {...props} />;
+    default:
+      return null;
+  }
+};

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Grid } from "react-bootstrap";
 import { Form } from "./Form/Form";
-import { formInputs } from "./Form/formInputs"
 
 class Events extends Component {
   state = {
@@ -9,32 +8,32 @@ class Events extends Component {
     fields: []
   };
 
-  componentDidMount = () => {
-    this.handleAddField();
-  };
+  // componentDidMount = () => {
+  //   this.handleAddField();
+  // };
 
-  handleAddField = () => {
-    let newFields = this.state.fields;
-    let newId = this.state.id;
-    let inputs = [
-      { componentClass: "input", id: newId++, label: "Event" },
-      { componentClass: "input", id: newId++, label: "Method" }
-    ]
-    newFields.push(formInputs(inputs));
-    this.setState({
-      fields: newFields,
-      id: newId
-    });
-  };
+  // handleAddField = () => {
+  //   let newFields = this.state.fields;
+  //   let newId = this.state.id;
+  //   let inputs = [
+  //     { componentClass: "input", id: newId++, label: "Event" },
+  //     { componentClass: "input", id: newId++, label: "Method" }
+  //   ]
+  //   newFields.push(formInputs(inputs));
+  //   this.setState({
+  //     fields: newFields,
+  //     id: newId
+  //   });
+  // };
 
   render() {
     return (
       <Grid style={{ marginTop: "100px" }}>
-        <Form
+        {/* <Form
           sections={["Events", "Methods"]}
           fields={this.state.fields}
           handleAddField={this.handleAddField}
-        />
+        /> */}
       </Grid>
     );
   }
