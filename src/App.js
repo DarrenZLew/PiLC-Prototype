@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { BrowserRouter } from "react-router-dom";
 import GlobalHeader from "./components/GlobalHeader";
+import "./App.css";
 
 class App extends Component {
   constructor(props) {
@@ -10,7 +12,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <GlobalHeader />
+        <BrowserRouter>
+          <GlobalHeader />
+        </BrowserRouter>
       </div>
     );
   }

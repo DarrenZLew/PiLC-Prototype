@@ -4,9 +4,9 @@ import { Switch, Route } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { withRouter } from "react-router-dom";
 
-import Components from "./Components";
+import { Components } from "./ComponentsPage";
 import LiveFeed from "./LiveFeed";
-import Events from "./Events";
+import { Events } from "./EventsPage";
 
 class GlobalHeader extends Component {
   constructor(props) {
