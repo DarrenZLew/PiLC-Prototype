@@ -6,6 +6,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { GlobalActions } from "../../actions";
 
+const validate = formValues => {
+  let errors = false;
+  let section = Object.entries(formValues);
+  if (section.length === 0) {
+    errors = true;
+  }
+  section.forEach(values => {});
+  return errors;
+};
+
 class Events extends Component {
   constructor(props) {
     super(props);
@@ -18,8 +28,34 @@ class Events extends Component {
   }
 
   submit = values => {
-    // console.log(values);
-    this.submitFormData(values);
+    let page = "events";
+    let formErrors = validate(values);
+    this.props.setFormMessage(formErrors, page);
+    let jsonObject = {
+      COMPONENTS: {},
+      EVENTS: []
+    };
+    Object.entries(values).forEach(([k, v]) => {
+      if (k.includes("components")) {
+        jsonObject["COMPONENTS"] = v;
+      } else {
+        let index = k.substring(
+          k.indexOf(" ") + 1,
+          k.indexOf(" ", k.indexOf(" ") + 1)
+        );
+        let sectionName = k.substring(k.indexOf("-") + 2);
+        let sectionValue = {
+          [sectionName]: v
+        };
+        jsonObject["EVENTS"][index] = {
+          ...jsonObject["EVENTS"][index],
+          ...sectionValue
+        };
+      }
+    });
+    console.log(jsonObject);
+    // NOTE: modify this function with your post request
+    // this.submitFormData(jsonObject);
   };
 
   componentDidMount = () => {
@@ -85,7 +121,7 @@ class Events extends Component {
     // NOTE: component props
     const { handleSubmit } = this.props;
     // NOTE: reducer props
-    const { eventOptions, formData } = this.props;
+    const { eventOptions, formData, eventPageMessage } = this.props;
     return (
       <Grid style={{ marginTop: "100px" }}>
         <BootStrapForm onSubmit={handleSubmit(this.submit)}>
@@ -104,6 +140,7 @@ class Events extends Component {
             handleEventChange={this.handleEventChange}
             eventName={this.state.eventName}
             handleEventNameChange={this.handleEventNameChange}
+            eventPageMessage={eventPageMessage}
           />
         </BootStrapForm>
       </Grid>
@@ -118,9 +155,14 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  const { fetchInitialData, addEvent, deleteEvent } = GlobalActions;
+  const {
+    fetchInitialData,
+    addEvent,
+    deleteEvent,
+    setFormMessage
+  } = GlobalActions;
   return bindActionCreators(
-    { fetchInitialData, addEvent, deleteEvent },
+    { fetchInitialData, addEvent, deleteEvent, setFormMessage },
     dispatch
   );
 };

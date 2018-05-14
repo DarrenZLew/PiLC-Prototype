@@ -1,11 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  Grid,
-  Button,
-  ButtonGroup,
-  Row
-} from "react-bootstrap";
+import { Grid, Button, ButtonGroup, Row, Alert } from "react-bootstrap";
 import { Form } from "../Form/Form";
 import { AddEventModal } from "./AddEventModal";
 import { DeleteEventModal } from "./DeleteEventModal";
@@ -26,11 +21,17 @@ const EventsForm = ({
   subFormPage,
   handleEventChange,
   eventName,
-  handleEventNameChange
+  handleEventNameChange,
+  eventPageMessage
 }) => {
   return (
     <div>
       <Grid>
+        {eventPageMessage && (
+          <Row>
+            <Alert bsStyle="warning">{eventPageMessage}</Alert>
+          </Row>
+        )}
         <Row>
           <Button
             bsStyle="primary"

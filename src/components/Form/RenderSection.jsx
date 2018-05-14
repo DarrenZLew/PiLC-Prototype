@@ -10,7 +10,7 @@ export const RenderSection = ({
   headerRow,
   pageName
 }) => {
-  const section = fields.map((field, index) => {
+  let section = fields.map((field, index) => {
     return (
       <FieldBody
         fields={fields}
@@ -22,7 +22,7 @@ export const RenderSection = ({
       />
     );
   });
-  const { name, check = null, input = null, value = null } = headerRow
+  const { name, check = null, input = null, value = null } = headerRow;
   return (
     <Grid style={{ marginBottom: "50px", marginTop: "50px" }}>
       <Row>

@@ -5,7 +5,9 @@ let initialState = {
   initialComponentData: [],
   eventOptions: [],
   formData: [],
-  components: {}
+  components: {},
+  componentPageMessage: null,
+  eventPageMessage: null
 };
 
 export default (state = initialState, action) => {
@@ -44,6 +46,24 @@ export default (state = initialState, action) => {
       return {
         ...state,
         components
+      };
+    case GlobalActions.Types.SetFormMessage:
+      let { hasErrors, page } = action.payload;
+      let componentPageMessage = null;
+      let eventPageMessage = null;
+      if (hasErrors && page === "components") {
+        componentPageMessage = "Please fill out all the fields.";
+      } else if (!hasErrors && page === "components") {
+        componentPageMessage = null;
+      } else if (hasErrors && page === "events") {
+        eventPageMessage = "Please fill out all the fields.";
+      } else if (!hasErrors && page === "events") {
+        eventPageMessage = null;
+      }
+      return {
+        ...state,
+        componentPageMessage,
+        eventPageMessage
       };
     default:
       return state;

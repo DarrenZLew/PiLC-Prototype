@@ -8,7 +8,7 @@ export const RenderSubForm = ({ fields, subFormData, subFormName, pageName }) =>
     return (
       <FieldArray
         key={index}
-        name={`${subFormName} ${section.sectionName}`}
+        name={`${subFormName}${section.sectionName}`}
         fieldName={section.sectionName}
         headerRow={section.headerRow}
         inputdata={section.inputdata}

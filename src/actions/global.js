@@ -2,7 +2,8 @@ export const Types = {
   AddEvent: "EVENTS_ADD_EVENT",
   DeleteEvent: "EVENTS_DELETE_EVENT",
   FetchInitialDataSuccess: "FETCH_INITIAL_DATA_SUCCESS",
-  SetEventComponents: "COMPONENTS_SET_EVENT_COMPONENTS"
+  SetEventComponents: "COMPONENTS_SET_EVENT_COMPONENTS",
+  SetFormMessage: "SET_FORM_MESSAGE"
 };
 
 export function addEvent(event) {
@@ -23,7 +24,7 @@ export function deleteEvent(id) {
       payload: {
         id
       }
-    })
+    });
 }
 
 export function fetchInitialData(url, name) {
@@ -59,5 +60,16 @@ export function setEventComponents(components) {
       payload: {
         components
       }
-    })
+    });
+}
+
+export function setFormMessage(hasErrors, page) {
+  return dispatch =>
+    dispatch({
+      type: Types.SetFormMessage,
+      payload: {
+        hasErrors,
+        page
+      }
+    });
 }

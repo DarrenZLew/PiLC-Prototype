@@ -1,10 +1,25 @@
 import React, { Component } from "react";
-import { Form as BSForm, Grid, Button, Row } from "react-bootstrap";
+import { Form as BSForm, Grid, Button, Row, Alert } from "react-bootstrap";
 import { Form } from "../Form/Form";
 import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { GlobalActions } from "../../actions";
+
+const validate = formValues => {
+  let errors = false;
+  let section = Object.entries(formValues);
+  section.forEach(values => {
+    if (values[0].includes("components")) {
+      values[1].forEach(row => {
+        if (!row.hasOwnProperty("inputOne") || !row.hasOwnProperty("inputTwo")) {
+          errors = true;
+        }
+      });
+    }
+  });
+  return errors;
+};
 
 class Components extends Component {
   constructor(props) {
@@ -12,15 +27,20 @@ class Components extends Component {
     this.state = {};
   }
   submit = values => {
+    let page = "components";
     let components = Object.entries(values).reduce((acc, curr) => {
       if (curr[0].includes("components")) {
-        acc[curr[0].replace("components 0 -  ", "")] = curr[1]
+        acc[curr[0].replace("components 0 -  ", "")] = curr[1];
       }
       return acc;
-    }, {})
-    this.props.setEventComponents(components);
-    // this.submitFormData(values);
+    }, {});
+    let formErrors = validate(values);
+    if (!formErrors) {
+      this.props.setEventComponents(components);
+    }
+    this.props.setFormMessage(formErrors, page);
   };
+
   componentDidMount() {
     this.props.fetchInitialData(
       "http://localhost:3001/components/",
@@ -44,11 +64,16 @@ class Components extends Component {
     // NOTE: component props
     const { handleSubmit } = this.props;
     // NOTE: reducer props
-    const { initialComponentData } = this.props;
+    const { initialComponentData, componentPageMessage } = this.props;
     return (
       <Grid style={{ marginTop: "100px" }}>
         <BSForm onSubmit={handleSubmit(this.submit)}>
           <Grid>
+            {componentPageMessage && (
+              <Row>
+                <Alert bsStyle="warning">{componentPageMessage}</Alert>
+              </Row>
+            )}
             <Row>
               <Button
                 bsStyle="primary"
@@ -78,8 +103,15 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  const { fetchInitialData, setEventComponents } = GlobalActions;
-  return bindActionCreators({ fetchInitialData, setEventComponents }, dispatch);
+  const {
+    fetchInitialData,
+    setEventComponents,
+    setFormMessage
+  } = GlobalActions;
+  return bindActionCreators(
+    { fetchInitialData, setEventComponents, setFormMessage },
+    dispatch
+  );
 };
 
 Components = connect(mapStateToProps, mapDispatchToProps)(Components);
@@ -87,6 +119,7 @@ Components = connect(mapStateToProps, mapDispatchToProps)(Components);
 // Decorate the form component
 export default reduxForm({
   form: "piLC",
+  validate,
   destroyOnUnmount: false, // <------ preserve form data
   forceUnregisterOnUnmount: true
 })(Components);

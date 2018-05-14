@@ -175,6 +175,36 @@
             "name": "timer"
           }
         ]
+      },
+      {
+        "sectionName": "Video Player",
+        "headerRow": {
+          "name": "Label",
+          "input": "File Path (Absolute or Relative)"
+        },
+        "inputdata": [
+          {
+            "name": "input"
+          },
+          {
+            "name": "input"
+          }
+        ]
+      },
+      {
+        "sectionName": "Audio Player",
+        "headerRow": {
+          "name": "Label",
+          "input": "File Path (Absolute or Relative)"
+        },
+        "inputdata": [
+          {
+            "name": "input"
+          },
+          {
+            "name": "input"
+          }
+        ]
       }
     ]
   ]

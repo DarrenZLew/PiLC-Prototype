@@ -11,17 +11,27 @@ import { RenderInput } from "../inputs/RenderInput";
 import { Field } from "redux-form";
 import { connect } from "react-redux";
 import { conditions } from "./fields";
-import { reduxForm, change } from "redux-form";
+import { reduxForm } from "redux-form";
 
 class EventFieldBody extends Component {
   render() {
     const { fields, field, id, inputdata, components } = this.props;
+    let componentClass = [];
+    let boundaries = [];
+    let sectionNames = ["Conditions", "Effects", "Activate", "Deactivate"];
+    let sectionName = sectionNames.find(
+      name => (fields.name.includes(name) ? name : null)
+    );
+
+    let checksActions = sectionName !== "Effects" ? "checks" : "actions";
+
     // Populate components select input with options from component page
     let optionsLabels = Object.values(components).reduce((acc, curr) => {
       curr.forEach(val => acc.push(val.inputOne));
       return acc;
     }, []);
-    inputdata[0].options = optionsLabels;
+    let options = [];
+    options[0] = optionsLabels;
 
     // Populate Check/Change select input with options from components inputs
     let condFieldsData = Object.entries(conditions);
@@ -30,36 +40,37 @@ class EventFieldBody extends Component {
       return comp[1][0].inputOne === compInputs[id].inputOne;
     });
     let conditionIndex = -1;
+
     if (compData) {
-      conditionIndex = condFieldsData.findIndex(
-        condition => condition[0] === compData[0]
+      let record = Object.entries(conditions).find(condition =>
+        compData[0].includes(condition[0])
+      );
+      options[1] = record[1][`${checksActions}Options`];
+      conditionIndex = condFieldsData.findIndex(condition =>
+        compData[0].includes(condition[0])
       );
     }
-    console.log(compData);
-    if (conditionIndex !== -1) {
-      let condChecksOpts = condFieldsData[conditionIndex][1].checksOptions;
-      if (compInputs[id] && inputdata[1].options !== condChecksOpts) {
-        inputdata[1].options = condChecksOpts;
-        // compInputs[id].inputTwo = undefined;
-        this.props.changeFieldValue(compInputs[id].inputTwo, undefined)
-      }
+    if (compInputs[id].inputOne && compInputs[id].inputTwo) {
+      Object.entries(condFieldsData[conditionIndex][1][checksActions]).find(
+        ([k, v]) => {
+          if (
+            k === compInputs[id].inputTwo &&
+            compData[1][0].inputOne === compInputs[id].inputOne
+          ) {
+            componentClass[2] = v.input;
+            if (v.input === "number") {
+              boundaries[2] = {
+                min: v.min,
+                max: v.max
+              };
+            }
+            if (v.input === "select") {
+              options[2] = v.options;
+            }
+          }
+        }
+      );
     }
-    // if (compInputs[id].inputTwo) {
-    //   Object.entries(condFieldsData[conditionIndex][1].checks).find(
-    //     ([k, v]) => {
-    //       if (k === compInputs[id].inputTwo) {
-    //         if (inputdata[2].name !== v.input) {
-    //           compInputs[id].inputThree = undefined;
-    //           inputdata[2].name = v.input;
-    //         }
-    //         if (v.input === "select") {
-    //           inputdata[2].options = v.options;
-    //         }
-    //       }
-    //     }
-    //   );
-    // }
-    this.props.changeFieldValue("field", "value")
     return (
       <Row style={{ marginBottom: "0px" }}>
         <FormGroup controlId={field + id}>
@@ -67,16 +78,22 @@ class EventFieldBody extends Component {
             <Field
               name={`${field}.inputOne`}
               inputdata={inputdata[0]}
-              componentClass={inputdata[0].name}
+              componentClass={componentClass[0]}
               component={RenderInput}
+              options={options[0]}
+              boundaries={boundaries[0]}
+              // disabled={disabled[0]}
             />
           </Col>
           <Col xs={4} style={{ padding: "0px" }}>
             <Field
               name={`${field}.inputTwo`}
               inputdata={inputdata[1]}
-              componentClass={inputdata[1].name}
+              componentClass={componentClass[1]}
               component={RenderInput}
+              options={options[1]}
+              boundaries={boundaries[1]}
+              // disabled={disabled[1]}
             />
           </Col>
           <Col xs={4} style={{ padding: "0px" }}>
@@ -84,8 +101,11 @@ class EventFieldBody extends Component {
               <Field
                 name={`${field}.inputThree`}
                 inputdata={inputdata[2]}
-                componentClass={inputdata[2].name}
+                componentClass={componentClass[2]}
                 component={RenderInput}
+                options={options[2]}
+                boundaries={boundaries[2]}
+                // disabled={disabled[2]}
               />
               <InputGroup.Button>
                 <Button onClick={() => fields.remove(id)}>
@@ -106,15 +126,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    // This will be passed as a property to the presentational component
-    changeFieldValue: function(field, value) {
-      console.log("testing", field, value)
-      // dispatch(change(form, field, value));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => {};
 
 EventFieldBody = connect(mapStateToProps, mapDispatchToProps)(EventFieldBody);
 

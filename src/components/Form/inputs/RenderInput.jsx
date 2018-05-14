@@ -5,7 +5,7 @@ import { TimerInput } from "./TimerInput";
 import { NumberInput } from "./NumberInput";
 
 export const RenderInput = props => {
-  const componentClass = props.inputdata.name;
+  const { componentClass = "select" } = props;
   switch (componentClass) {
     case "select":
       return <SelectInput {...props} />;

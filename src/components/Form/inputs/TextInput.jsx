@@ -1,13 +1,8 @@
 import React from "react";
 import { FormControl } from "react-bootstrap";
 
-export const TextInput = (props) => {
-  const { meta } = props;
-  const { touched, error, warning } = meta;
-  return (
+export const TextInput = props => (
   <div>
     <FormControl {...props.input} {...props} />
   </div>
-
-  )
-};
+);
